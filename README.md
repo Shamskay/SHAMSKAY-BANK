@@ -1,18 +1,18 @@
-# SHAMSKAY-BANK
+**SHAMSKAY-BANK**
 
-A learning-wise bank app project.
+This is a learning-wise bank app project which allow user (customer) to perform various transactions which are secured.
 
-## SHAMSKAY BANK APP
+**SHAMSKAY BANK APP**
 
 SHAMSKAY BANK APP is a console-based banking application built with Python and MySQL. It provides a user-facing banking interface for registration, login, deposits, transfers, airtime purchase, bill payment, transaction history, PIN management, password changes, profile viewing, and address editing.
 
-## Repository Contents
+**REPOSITORY CONTENTS**
 
-### `BANKAPP.py`
+**`BANKAPP.py`**
 
-`BANKAPP.py` is the main user interface file committed to this repository. It contains the console menus and user workflow for the banking system.
+`BANKAPP.py` is the main user interface file which is committed to this repository and it contains the console menus and user workflow for the banking system.
 
-Features in `BANKAPP.py` include:
+The following are the features in `BANKAPP.py`:
 
 - Home menu
 - Customer registration
@@ -29,11 +29,11 @@ Features in `BANKAPP.py` include:
 - View profile
 - Edit address
 
-### `BANKCONFIG.py`
+**`BANKCONFIG.py`**
 
-`BANKCONFIG.py` is the private backend file and is intentionally not committed to this repository.
+The `BANKCONFIG.py` is the private backend file and is intentionally not committed to this repository but a template was made available.
 
-It contains backend logic such as:
+'BANKCONFIG.py' contains the following backend logic:
 
 - MySQL database connection
 - Database/table setup
@@ -46,19 +46,15 @@ It contains backend logic such as:
 - Transaction history retrieval
 - Money formatting and validation helpers
 
-To run the app locally, keep your private `BANKCONFIG.py` in the same folder as `BANKAPP.py`.
-
-### `BANKCONFIG_TEMPLATE.py`
+**`BANKCONFIG_TEMPLATE.py`**
 
 `BANKCONFIG_TEMPLATE.py` is a placeholder file showing that the private backend is not included in the public repository.
 
-If you are setting up this project on another computer, create your own private `BANKCONFIG.py` in the project folder and do not push it to Git.
+**`schema.sql`**
 
-### `schema.sql`
+`schema.sql` contains the database schema used by the application. It defines the main database tables created i.e customers, transactions, and email OTP records.
 
-`schema.sql` contains the database schema used by the application. It defines the main database tables for customers, transactions, and email OTP records.
-
-## Features
+**Features**
 
 - User registration with email OTP verification
 - 4-digit email verification OTP
@@ -74,12 +70,12 @@ If you are setting up this project on another computer, create your own private 
 - Address update
 - Transaction history display
 
-## Requirements
+**Requirements**
 
 - Python 3.x
 - MySQL Server
 - `mysql-connector-python`
-- Optional: `pyttsx3` for voice output
+- `pyttsx3` for voice output
 
 Install dependencies:
 
@@ -88,36 +84,22 @@ pip install mysql-connector-python
 pip install pyttsx3
 ```
 
-## Setup
+**Setup**
 
-1. Start your MySQL server.
-2. Keep your private `BANKCONFIG.py` in the same folder as `BANKAPP.py`.
-3. Update your private database and email credentials in `BANKCONFIG.py`.
-4. Run the application:
+1. Started MySQL server.
+2. `BANKCONFIG.py` was kept in the same folder as `BANKAPP.py`.
+3. Email credentials were updated in the private database in `BANKCONFIG.py`.
+4. The application 'BANKAPP.py' was run:
 
-```bash
-py BANKAPP.py
-```
 
-## OTP Settings
+**OTP Settings**
 
 - Registration email verification OTP expires after 2 minutes.
 - Password/PIN change OTP expires after 2 minutes.
 - Email verification OTP is generated as a 4-digit code.
 
-## Git Privacy Setup
-
-The real backend file is ignored with `.gitignore`:
-
-```gitignore
-BANKCONFIG.py
-__pycache__/
-*.pyc
-.env
-```
-
 Only public files such as `BANKAPP.py`, `README.md`, and optional template/setup files should be pushed to a public repository.
 
-## Security Notes
+**Security Notes**
 
 This project hashes passwords, PINs, and OTPs before storing them in the database.
