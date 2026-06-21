@@ -1,4 +1,8 @@
-# SHAMSKAY BANK APP
+# SHAMSKAY-BANK
+
+A learning-wise bank app project.
+
+## SHAMSKAY BANK APP
 
 SHAMSKAY BANK APP is a console-based banking application built with Python and MySQL. It provides a user-facing banking interface for registration, login, deposits, transfers, airtime purchase, bill payment, transaction history, PIN management, password changes, profile viewing, and address editing.
 
