@@ -102,7 +102,7 @@ py BANKAPP.py
 ## OTP Settings
 
 - Registration email verification OTP expires after 2 minutes.
-- Password/PIN change OTP expires after 3 minutes.
+- Password/PIN change OTP expires after 2 minutes.
 - Email verification OTP is generated as a 4-digit code.
 
 ## Git Privacy Setup
@@ -120,6 +120,4 @@ Only public files such as `BANKAPP.py`, `README.md`, and optional template/setup
 
 ## Security Notes
 
-This project hashes passwords, PINs, and OTPs before storing them in the database. However, it uses SHA-256 hashing and is intended mainly as a learning/console banking project. For production use, stronger password hashing such as bcrypt or Argon2 should be used.
-
-Do not expose database credentials, email credentials, or the private backend file in a public repository.
+This project hashes passwords, PINs, and OTPs before storing them in the database.
