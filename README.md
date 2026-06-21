@@ -1,10 +1,10 @@
 # SHAMSKAY-BANK
 
-A learning-wise bank app project.
+This is a learning-wise bank app project which allows users/customers to perform various secured banking transactions.
 
 ## SHAMSKAY BANK APP
 
-SHAMSKAY BANK APP is a console-based banking application built with Python and MySQL. It provides a user-facing banking interface for registration, login, deposits, transfers, airtime purchase, bill payment, transaction history, PIN management, password changes, profile viewing, and address editing.
+SHAMSKAY BANK APP is a console-based banking application built with Python and MySQL. It provides a user-facing banking interface for registration, login, deposits, transfers, airtime purchase, bill payment, transaction history, PIN management, password changes, forgot password, profile viewing, and address editing.
 
 ## Repository Contents
 
@@ -12,7 +12,7 @@ SHAMSKAY BANK APP is a console-based banking application built with Python and M
 
 `BANKAPP.py` is the main user interface file committed to this repository. It contains the console menus and user workflow for the banking system.
 
-Features in `BANKAPP.py` include:
+The following are the features in `BANKAPP.py`:
 
 - Home menu
 - Customer registration
@@ -32,9 +32,9 @@ Features in `BANKAPP.py` include:
 
 ### `BANKCONFIG.py`
 
-`BANKCONFIG.py` is the private backend file and is intentionally not committed to this repository.
+`BANKCONFIG.py` is the private backend file and is intentionally not committed to this repository, but a template is available.
 
-It contains backend logic such as:
+`BANKCONFIG.py` contains backend logic such as:
 
 - MySQL database connection
 - Database/table setup
@@ -47,17 +47,13 @@ It contains backend logic such as:
 - Transaction history retrieval
 - Money formatting and validation helpers
 
-To run the app locally, keep your private `BANKCONFIG.py` in the same folder as `BANKAPP.py`.
-
 ### `BANKCONFIG_TEMPLATE.py`
 
 `BANKCONFIG_TEMPLATE.py` is a placeholder file showing that the private backend is not included in the public repository.
 
-If you are setting up this project on another computer, create your own private `BANKCONFIG.py` in the project folder and do not push it to Git.
-
 ### `schema.sql`
 
-`schema.sql` contains the database schema used by the application. It defines the main database tables for customers, transactions, and email OTP records.
+`schema.sql` contains the database schema used by the application. It defines the main database tables created, including customers, transactions, and email OTP records.
 
 ## Features
 
@@ -109,6 +105,8 @@ py BANKAPP.py
 
 ## Git Privacy Setup
 
+Only public files such as `BANKAPP.py`, `README.md`, and optional template/setup files should be pushed to a public repository.
+
 The real backend file is ignored with `.gitignore`:
 
 ```gitignore
@@ -117,8 +115,6 @@ __pycache__/
 *.pyc
 .env
 ```
-
-Only public files such as `BANKAPP.py`, `README.md`, and optional template/setup files should be pushed to a public repository.
 
 ## Security Notes
 
