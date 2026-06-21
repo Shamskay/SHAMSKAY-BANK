@@ -1,0 +1,33 @@
+CREATE DATABASE IF NOT EXISTS SHAMSKAY_BANK;
+USE SHAMSKAY_BANK;
+
+CREATE TABLE IF NOT EXISTS customers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(150) NOT NULL,
+    email VARCHAR(190) NOT NULL UNIQUE,
+    password_hash VARCHAR(64) NOT NULL,
+    account_number VARCHAR(12) NOT NULL UNIQUE,
+    balance DECIMAL(18,2) NOT NULL DEFAULT 0.00,
+    pin_hash VARCHAR(64) NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS transactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    account_number VARCHAR(12) NOT NULL,
+    transaction_type VARCHAR(30) NOT NULL,
+    amount DECIMAL(18,2) NOT NULL,
+    balance_after DECIMAL(18,2) NOT NULL,
+    recipient_account_number VARCHAR(12) NULL,
+    reference VARCHAR(128) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (account_number) REFERENCES customers(account_number)
+);
+
+CREATE TABLE IF NOT EXISTS email_otps (
+    email VARCHAR(190) NOT NULL UNIQUE,
+    otp_hash VARCHAR(64) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
