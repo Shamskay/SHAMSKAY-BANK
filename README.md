@@ -17,6 +17,7 @@ Features in `BANKAPP.py` include:
 - Home menu
 - Customer registration
 - Customer login
+- Forgot password with email OTP verification
 - Dashboard menu
 - View balance
 - Deposit money
@@ -61,6 +62,7 @@ If you are setting up this project on another computer, create your own private 
 ## Features
 
 - User registration with email OTP verification
+- Forgot password with email OTP verification
 - 4-digit email verification OTP
 - Login authentication
 - Account balance viewing
@@ -102,7 +104,7 @@ py BANKAPP.py
 ## OTP Settings
 
 - Registration email verification OTP expires after 2 minutes.
-- Password/PIN change OTP expires after 3 minutes.
+- Password/PIN/forgot password OTP expires after 3 minutes.
 - Email verification OTP is generated as a 4-digit code.
 
 ## Git Privacy Setup

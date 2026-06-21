@@ -3,7 +3,7 @@ Private backend template for SHAMSKAY BANK APP.
 
 Do not commit this file as BANKCONFIG.py with real credentials.
 
-To run the app locally:
+To run the application locally:
 1. Copy this file in your private/local project.
 2. Rename the copy to BANKCONFIG.py.
 3. Add your private backend code and credentials.

@@ -9,7 +9,7 @@ class BANKAPP(BANKCONFIG):
 
     def Home(self):
         while True:
-            speak(f"Welcome to Shamskay Microfinance bank.")
+            speak(f"Welcome to {self.bank_name}.")
             print(f"\n{'=' * 30}")
             print(f"   WELCOME TO {self.bank_name}")
             print(f"{'=' * 30}")
@@ -18,7 +18,8 @@ class BANKAPP(BANKCONFIG):
             
             1. Register
             2. Login
-            3. Exit
+            3. Forgot Password
+            4. Exit
             """)
             choice = input("Enter your choice: ").strip()
 
@@ -27,7 +28,9 @@ class BANKAPP(BANKCONFIG):
             elif choice == "2":
                 self.Login()
             elif choice == "3":
-                speak(f"Thank you for visiting Shamskay Microfinance bank.")
+                self.ForgotPassword()
+            elif choice == "4":
+                speak(f"Thank you for banking with us at {self.bank_name}.")
                 print("Goodbye!")
                 exit()
             else:
@@ -118,11 +121,55 @@ class BANKAPP(BANKCONFIG):
         if not result["status"]:
             print(result["message"])
             return
-
+        
         customer = result["data"]
         print(result["message"])
         self.dashboard(customer)
         
+
+    def ForgotPassword(self):
+        print("\n===== FORGOT PASSWORD =====")
+        email = input("Email: ").strip()
+
+        if not email_validate(email):
+            print("Invalid email format. Use the form name@gmail.com")
+            return
+
+        print("Sending password reset OTP to your email...")
+        otp_request = self.send_forgot_password_otp(email)
+        if not otp_request["status"]:
+            print(otp_request["message"])
+            return
+
+        otp_attempts = 0
+        while otp_attempts < 3:
+            otp = input("Enter OTP sent to your email (or type 'resend' to get a new one): ").strip()
+            if otp.lower() == "resend":
+                print("Resending password reset OTP...")
+                otp_request = self.send_forgot_password_otp(email)
+                print(otp_request["message"])
+                continue
+
+            new_password = input("New Password: ").strip()
+            confirm_password = input("Confirm New Password: ").strip()
+
+            if not validate_password(new_password):
+                print("Password must be at least 8 characters with uppercase, lowercase, number, and special character.")
+                continue
+            if new_password != confirm_password:
+                print("Passwords do not match.")
+                continue
+
+            result = self.reset_forgot_password(email, new_password, confirm_password, otp)
+            print(result["message"])
+            if result["status"]:
+                return
+
+            otp_attempts += 1
+            if otp_attempts < 3:
+                print(f"Incorrect or expired OTP. {3 - otp_attempts} attempts remaining.")
+            else:
+                print("Incorrect or expired OTP. Maximum attempts reached. Please request a new password reset OTP.")
 
     
     def dashboard(self, customer):
