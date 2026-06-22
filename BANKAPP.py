@@ -186,8 +186,7 @@ class BANKAPP(BANKCONFIG):
 
     def AdminLogin(self):
         print("\n===== ADMIN LOGIN =====")
-        password = input("Admin Password: ").strip()
-        result = self.admin_login(password)
+        result = self.admin_login()
         if not result["status"]:
             print(result["message"])
             return

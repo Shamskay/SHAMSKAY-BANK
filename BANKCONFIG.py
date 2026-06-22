@@ -942,10 +942,10 @@ class BANKCONFIG:
         except Exception as error:
             return {"status": False, "message": str(error)}
 
-def admin_login(self):
+    def admin_login(self):
         admin_password = ("SHAMSKAY").strip().upper()
         password = input("Admin Password: ").strip()
-        if password != admin_password:
+        if password.upper() != admin_password:
             return {"status": False, "message": "Invalid admin password."}
         return {"status": True, "message": "Admin login successful."}
 
