@@ -43,6 +43,7 @@ class BANKAPP(BANKCONFIG):
         phone_number = input("Phone Number: ").strip()
         address = input("Address: ").strip()
         date_of_birth = input("Date of Birth (YYYY-MM-DD): ").strip()
+        gender = input("Gender (Male/Female): ").strip()
         password = input("Password: ").strip()
         confirm_password = input("Confirm Password: ").strip()
 
@@ -66,6 +67,13 @@ class BANKAPP(BANKCONFIG):
             return
         if not date_of_birth:
             print("Date of birth is required.")
+            return
+        if not gender:
+            print("Gender is required.")
+            return
+        gender = gender.title()
+        if gender not in ["Male", "Female"]:
+            print("Gender must be Male or Female.")
             return
         if not email_validate(email):
             print("Invalid email format. Use the form name@gmail.com")
@@ -93,7 +101,7 @@ class BANKAPP(BANKCONFIG):
                 continue
 
             if self.verify_email_otp(email, otp):
-                result = self.create_customer(full_name, email, password, confirm_password, phone_number=phone_number, address=address, date_of_birth=date_of_birth, otp_verified=True)
+                result = self.create_customer(full_name, email, password, confirm_password, phone_number=phone_number, address=address, date_of_birth=date_of_birth, gender=gender, otp_verified=True)
                 if result["status"]:
                     customer = result["data"]
                     print("\nRegistration successful!")
@@ -388,6 +396,7 @@ class BANKAPP(BANKCONFIG):
         print(f"Phone: {customer.get('phone_number') or 'Not set'}")
         print(f"Address: {customer.get('address') or 'Not set'}")
         print(f"Date of Birth: {customer.get('date_of_birth') or 'Not set'}")
+        print(f"Gender: {customer.get('gender') or 'Not set'}")
         print(f"Account Number: {customer['account_number']}")
         print(f"Balance: {money_format(customer['balance'])}")
         print(f"Account Created: {customer['created_at']}")
