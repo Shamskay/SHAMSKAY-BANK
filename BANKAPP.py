@@ -19,7 +19,8 @@ class BANKAPP(BANKCONFIG):
             1. Register
             2. Login
             3. Forgot Password
-            4. Exit
+            4. Admin Login
+            5. Exit
             """)
             choice = input("Enter your choice: ").strip()
 
@@ -30,6 +31,8 @@ class BANKAPP(BANKCONFIG):
             elif choice == "3":
                 self.ForgotPassword()
             elif choice == "4":
+                self.AdminLogin()
+            elif choice == "5":
                 speak(f"Thank you for banking with us at {self.bank_name}.")
                 print("Goodbye!")
                 exit()
@@ -181,7 +184,107 @@ class BANKAPP(BANKCONFIG):
             else:
                 print("Incorrect or expired OTP. Maximum attempts reached. Please request a new password reset OTP.")
 
-    
+    def AdminLogin(self):
+        print("\n===== ADMIN LOGIN =====")
+        password = input("Admin Password: ").strip()
+        result = self.admin_login(password)
+        if not result["status"]:
+            print(result["message"])
+            return
+        print(result["message"])
+        self.admin_dashboard()
+
+    def admin_dashboard(self):
+        while True:
+            print("""
+            ===== ADMIN DASHBOARD =====
+            1. View All Customers
+            2. View Customer Transactions
+            3. Freeze Account
+            4. Unfreeze Account
+            5. Logout
+            """)
+            choice = input("Enter your choice: ").strip()
+
+            if choice == "1":
+                self.view_all_customers()
+            elif choice == "2":
+                self.view_customer_transactions()
+            elif choice == "3":
+                self.freeze_account()
+            elif choice == "4":
+                self.unfreeze_account()
+            elif choice == "5":
+                print("Admin logged out successfully.")
+                return
+            else:
+                print("Invalid choice. Please try again.")
+
+    def view_all_customers(self):
+        print("\n===== ALL CUSTOMERS =====")
+        result = self.get_all_customers()
+        if not result["status"]:
+            print(result["message"])
+            return
+
+        print(f"\n{'Account No':<14} {'Name':<20} {'Email':<25} {'Balance':<15} {'Frozen'}")
+        print("-" * 90)
+        for c in result["data"]:
+            frozen = "Yes" if c.get("is_frozen") else "No"
+            print(f"{c['account_number']:<14} {c['full_name'][:20]:<20} {c['email']:<25} {money_format(c['balance']):<15} {frozen}")
+
+    def view_customer_transactions(self):
+        print("\n===== VIEW CUSTOMER TRANSACTIONS =====")
+        account_number = input("Customer Account Number: ").strip()
+        result = self.view_transactions(account_number)
+
+        if not result["status"]:
+            print(result["message"])
+            return
+
+        customer = self.get_customer_by_account(account_number)
+        if customer:
+            print(f"\nTransactions for: {customer['full_name']} ({account_number})")
+        else:
+            print(f"\nTransactions for account: {account_number}")
+
+        print(f"\n{'Date':<22} {'Type':<18} {'Amount':<14} {'Balance After':<14} {'Reference'}")
+        print("-" * 95)
+        for transaction in result["data"]:
+            print(
+                f"{str(transaction['created_at']):<22} "
+                f"{transaction['transaction_type']:<18} "
+                f"{money_format(transaction['amount']):<14} "
+                f"{money_format(transaction['balance_after']):<14} "
+                f"{transaction['reference']}"
+            )
+
+    def freeze_account(self):
+        print("\n===== FREEZE ACCOUNT =====")
+        account_number = input("Account Number to Freeze: ").strip()
+        customer = self.get_customer_by_account(account_number)
+        if not customer:
+            print("Account not found.")
+            return
+        if customer.get("is_frozen"):
+            print("Account is already frozen.")
+            return
+        result = self._freeze_account(account_number)
+        print(result["message"])
+
+    def unfreeze_account(self):
+        print("\n===== UNFREEZE ACCOUNT =====")
+        account_number = input("Account Number to Unfreeze: ").strip()
+        customer = self.get_customer_by_account(account_number)
+        if not customer:
+            print("Account not found.")
+            return
+        if not customer.get("is_frozen"):
+            print("Account is not frozen.")
+            return
+        result = self._unfreeze_account(account_number)
+        print(result["message"])
+
     def dashboard(self, customer):
         while True:
             print(f"""

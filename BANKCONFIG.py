@@ -140,7 +140,7 @@ class BANKCONFIG:
             server_conn.close()
 
     def _ensure_schema(self):
-        self.mycursor.execute("CREATE TABLE IF NOT EXISTS customers (id INT AUTO_INCREMENT PRIMARY KEY, full_name VARCHAR(150) NOT NULL, email VARCHAR(190) NOT NULL UNIQUE, password_hash VARCHAR(64) NOT NULL, account_number VARCHAR(12) NOT NULL UNIQUE, balance DECIMAL(18,2) NOT NULL DEFAULT 0.00, pin_hash VARCHAR(64) NULL, phone_number VARCHAR(20) NULL, address VARCHAR(255) NULL, date_of_birth DATE NULL, gender VARCHAR(10) NULL, created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)")
+        self.mycursor.execute("CREATE TABLE IF NOT EXISTS customers (id INT AUTO_INCREMENT PRIMARY KEY, full_name VARCHAR(150) NOT NULL, email VARCHAR(190) NOT NULL UNIQUE, password_hash VARCHAR(64) NOT NULL, account_number VARCHAR(12) NOT NULL UNIQUE, balance DECIMAL(18,2) NOT NULL DEFAULT 0.00, pin_hash VARCHAR(64) NULL, phone_number VARCHAR(20) NULL, address VARCHAR(255) NULL, date_of_birth DATE NULL, gender VARCHAR(10) NULL, is_frozen BOOLEAN NOT NULL DEFAULT FALSE, created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)")
         self.mycursor.execute("CREATE TABLE IF NOT EXISTS transactions (id INT AUTO_INCREMENT PRIMARY KEY, account_number VARCHAR(12) NOT NULL, transaction_type VARCHAR(30) NOT NULL, amount DECIMAL(18,2) NOT NULL, balance_after DECIMAL(18,2) NOT NULL, recipient_account_number VARCHAR(12) NULL, reference VARCHAR(128) NOT NULL, description VARCHAR(255) NOT NULL, created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (account_number) REFERENCES customers(account_number))")
         self.mycursor.execute("CREATE TABLE IF NOT EXISTS email_otps (email VARCHAR(190) NOT NULL UNIQUE, otp_hash VARCHAR(64) NOT NULL, expires_at DATETIME NOT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)")
         self._migrate_customers_schema()
@@ -167,6 +167,11 @@ class BANKCONFIG:
             self.mycursor.fetchone()
         except Exception:
             self.mycursor.execute("ALTER TABLE customers ADD COLUMN gender VARCHAR(10) NULL")
+        try:
+            self.mycursor.execute("SELECT is_frozen FROM customers LIMIT 1")
+            self.mycursor.fetchone()
+        except Exception:
+            self.mycursor.execute("ALTER TABLE customers ADD COLUMN is_frozen BOOLEAN NOT NULL DEFAULT FALSE")
 
     def _send_email(self, to_email, subject, body):
         try:
@@ -345,6 +350,9 @@ class BANKCONFIG:
             if not customer:
                 return {"status": False, "message": "Email does not exist."}
 
+            if customer.get("is_frozen"):
+                return {"status": False, "message": "Your account has been frozen. Contact admin."}
+
             if not password_check(password, customer["password_hash"]):
                 return {"status": False, "message": "Incorrect password."}
 
@@ -361,6 +369,7 @@ class BANKCONFIG:
                     "address": customer.get("address"),
                     "date_of_birth": customer.get("date_of_birth"),
                     "gender": customer.get("gender"),
+                    "is_frozen": customer.get("is_frozen"),
                     "created_at": customer["created_at"],
                 },
             }
@@ -371,7 +380,7 @@ class BANKCONFIG:
         try:
             self.mycursor.execute(
                 """
-                SELECT id, full_name, email, account_number, balance, phone_number, address, date_of_birth, gender, created_at
+                SELECT id, full_name, email, account_number, balance, phone_number, address, date_of_birth, gender, is_frozen, created_at
                 FROM customers
                 WHERE account_number=%s
                 """,
@@ -932,3 +941,65 @@ class BANKCONFIG:
             return {"status": True, "data": transactions}
         except Exception as error:
             return {"status": False, "message": str(error)}
+
+    def admin_login(self):
+        admin_password = "admin123"
+        password = input("Admin Password: ").strip()
+        if password != admin_password:
+            return {"status": False, "message": "Invalid admin password."}
+        return {"status": True, "message": "Admin login successful."}
+
+    def get_all_customers(self):
+        try:
+            self.mycursor.execute(
+                """
+                SELECT id, full_name, email, account_number, balance, phone_number, address, date_of_birth, gender, is_frozen, created_at
+                FROM customers
+                ORDER BY created_at DESC
+                """
+            )
+            customers = self.mycursor.fetchall()
+            if not customers:
+                return {"status": False, "message": "No customers found."}
+            return {"status": True, "data": customers}
+        except Exception as error:
+            return {"status": False, "message": str(error)}
+
+    def _freeze_account(self, account_number):
+        try:
+            self.mycursor.execute(
+                "UPDATE customers SET is_frozen=TRUE WHERE account_number=%s",
+                (account_number,),
+            )
+            self.conn.commit()
+            if self.mycursor.rowcount > 0:
+                return {"status": True, "message": "Account frozen successfully."}
+            return {"status": False, "message": "Account not found."}
+        except Exception as error:
+            self.conn.rollback()
+            return {"status": False, "message": str(error)}
+
+    def _unfreeze_account(self, account_number):
+        try:
+            self.mycursor.execute(
+                "UPDATE customers SET is_frozen=FALSE WHERE account_number=%s",
+                (account_number,),
+            )
+            self.conn.commit()
+            if self.mycursor.rowcount > 0:
+                return {"status": True, "message": "Account unfrozen successfully."}
+            return {"status": False, "message": "Account not found."}
+        except Exception as error:
+            self.conn.rollback()
+            return {"status": False, "message": str(error)}
+
+    def is_account_frozen(self, account_number):
+        try:
+            self.mycursor.execute(
+                "SELECT is_frozen FROM customers WHERE account_number=%s",
+                (account_number,),
+            )
+            row = self.mycursor.fetchone()
+            return row["is_frozen"] if row else False
+        except Exception:
+            return False
