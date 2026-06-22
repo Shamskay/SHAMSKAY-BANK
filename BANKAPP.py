@@ -14,13 +14,12 @@ class BANKAPP(BANKCONFIG):
             print(f"   WELCOME TO {self.bank_name}")
             print(f"{'=' * 30}")
             print("""
-            ======= WHAT CAN WE DO FOR YOU TODAY? =======
+======= WHAT CAN WE DO FOR YOU TODAY? =======
             
-            1. Register
-            2. Login
-            3. Forgot Password
-            4. Admin Login
-            5. Exit
+             1. Register
+             2. Login
+             3. Forgot Password
+             4. Exit
             """)
             choice = input("Enter your choice: ").strip()
 
@@ -31,8 +30,6 @@ class BANKAPP(BANKCONFIG):
             elif choice == "3":
                 self.ForgotPassword()
             elif choice == "4":
-                self.AdminLogin()
-            elif choice == "5":
                 speak(f"Thank you for banking with us at {self.bank_name}.")
                 print("Goodbye!")
                 exit()
@@ -124,7 +121,24 @@ class BANKAPP(BANKCONFIG):
 
 
     def Login(self):
-        print("\n===== LOGIN =====")
+        while True:
+            print("\n===== LOGIN =====")
+            print("1. Customer Login")
+            print("2. Admin Login")
+            print("3. Back")
+            choice = input("Enter your choice: ").strip()
+
+            if choice == "1":
+                break
+            elif choice == "2":
+                self.AdminLogin()
+                return
+            elif choice == "3":
+                return
+            else:
+                print("Invalid choice. Please try again.")
+                continue
+
         email = input("Email: ").strip()
         password = input("Password: ").strip()
 
