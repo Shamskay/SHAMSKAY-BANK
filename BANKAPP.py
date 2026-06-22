@@ -120,6 +120,8 @@ class BANKAPP(BANKCONFIG):
         result = self.login_customer(email, password)
         if not result["status"]:
             print(result["message"])
+            if result["message"] == "Incorrect password.":
+                print("Forgot your password? Choose 'Forgot Password' from the home menu.")
             return
         
         customer = result["data"]

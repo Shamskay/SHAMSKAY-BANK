@@ -77,7 +77,6 @@ The following are the features in `BANKAPP.py`:
 - Python 3.x
 - MySQL Server
 - `mysql-connector-python`
-- Optional: `pyttsx3` for voice output
 
 Install dependencies:
 
@@ -85,39 +84,39 @@ Install dependencies:
 pip install mysql-connector-python
 pip install pyttsx3
 ```
+## Modules
+
+The following modules were used:
+- pyttsx3
+- hashlib
+- re
+- smtplib
+- ssl
+- datetime
+- decimal
+- email.mime.text
 
 ## Setup
 
-1. Start your MySQL server.
-2. Keep your private `BANKCONFIG.py` in the same folder as `BANKAPP.py`.
-3. Update your private database and email credentials in `BANKCONFIG.py`.
-4. Run the application:
+1. The MySQL server was started.
+2. `BANKCONFIG.py` (private) was kept in the same folder as `BANKAPP.py`.
+3. Private database and email credentials updated in the `BANKCONFIG.py`.
+4. The application, `BANKAPP.py`, was run:
 
-```bash
-py BANKAPP.py
-```
 
 ## OTP Settings
 
 - Registration email verification OTP expires after 2 minutes.
-- Password/PIN/forgot password OTP expires after 3 minutes.
+- Password/PIN/forgot password OTP expires after 2 minutes.
 - Email verification OTP is generated as a 4-digit code.
 
 ## Git Privacy Setup
 
-Only public files such as `BANKAPP.py`, `README.md`, and optional template/setup files should be pushed to a public repository.
+Only public files such as `BANKAPP.py`, `README.md`, and optional template/setup files were pushed to a public repository.
 
 The real backend file is ignored with `.gitignore`:
 
-```gitignore
-BANKCONFIG.py
-__pycache__/
-*.pyc
-.env
-```
 
 ## Security Notes
 
-This project hashes passwords, PINs, and OTPs before storing them in the database. However, it uses SHA-256 hashing and is intended mainly as a learning/console banking project. For production use, stronger password hashing such as bcrypt or Argon2 should be used.
-
-Do not expose database credentials, email credentials, or the private backend file in a public repository.
+This project hashes passwords, PINs, and OTPs before storing them in the database.
