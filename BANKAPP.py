@@ -359,6 +359,9 @@ class BANKAPP(BANKCONFIG):
 
     def deposit_menu(self, customer):
         print("\n===== DEPOSIT MONEY =====")
+        if customer.get("is_frozen"):
+            print("Your account is frozen. You cannot make deposits.")
+            return
         amount = input("Amount: ").strip()
         result = self.deposit_money(customer["account_number"], amount)
         print(result["message"])
@@ -367,6 +370,9 @@ class BANKAPP(BANKCONFIG):
 
     def buy_airtime_menu(self, customer):
         print("\n===== BUY AIRTIME =====")
+        if customer.get("is_frozen"):
+            print("Your account is frozen. You cannot buy airtime.")
+            return
         provider = input("Provider (MTN/Airtel/Glo/9mobile): ").strip()
         phone_number = input("Phone Number: ").strip()
         if not phone_number.isdigit() or len(phone_number) != 11:
@@ -390,6 +396,9 @@ class BANKAPP(BANKCONFIG):
 
     def transfer_menu(self, customer):
         print("\n===== TRANSFER MONEY =====")
+        if customer.get("is_frozen"):
+            print("Your account is frozen. You cannot make transfers.")
+            return
         recipient_account = input("Recipient Account Number: ").strip()
         recipient = self.get_customer_by_account(recipient_account)
         if not recipient:
@@ -420,6 +429,9 @@ class BANKAPP(BANKCONFIG):
 
     def pay_bill_menu(self, customer):
         print("\n===== PAY BILLS =====")
+        if customer.get("is_frozen"):
+            print("Your account is frozen. You cannot pay bills.")
+            return
         biller = input("Biller (Electricity/Internet/Cable/Other): ").strip()
         customer_id = input("Customer/Meter/Smart Card Number: ").strip()
         if not customer_id.isdigit() or len(customer_id) != 11:
@@ -460,6 +472,9 @@ class BANKAPP(BANKCONFIG):
             )
 
     def manage_pin_menu(self, customer):
+        if customer.get("is_frozen"):
+            print("\nYour account is frozen. You cannot manage your transaction PIN.")
+            return
         while True:
             print("""
             ===== TRANSACTION PIN =====
@@ -493,6 +508,9 @@ class BANKAPP(BANKCONFIG):
                 print("Invalid choice. Please try again.")
 
     def change_password_menu(self, customer):
+        if customer.get("is_frozen"):
+            print("\nYour account is frozen. You cannot change your password.")
+            return
         old_password = input("\nCurrent Password: ").strip()
         new_password = input("New Password: ").strip()
         confirm_password = input("Confirm New Password: ").strip()

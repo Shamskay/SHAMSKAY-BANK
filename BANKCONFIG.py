@@ -350,9 +350,6 @@ class BANKCONFIG:
             if not customer:
                 return {"status": False, "message": "Email does not exist."}
 
-            if customer.get("is_frozen"):
-                return {"status": False, "message": "Your account has been frozen. Contact admin."}
-
             if not password_check(password, customer["password_hash"]):
                 return {"status": False, "message": "Incorrect password."}
 
