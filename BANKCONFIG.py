@@ -711,12 +711,15 @@ class BANKCONFIG:
 
     def _debit_account(self, account_number, amount, transaction_type, recipient_account_number, reference, description):
         self.mycursor.execute(
-            "SELECT balance FROM customers WHERE account_number=%s FOR UPDATE",
+            "SELECT balance, is_frozen FROM customers WHERE account_number=%s FOR UPDATE",
             (account_number,),
         )
         row = self.mycursor.fetchone()
         if not row:
             return {"status": False, "message": "Account not found."}
+
+        if row.get("is_frozen"):
+            return {"status": False, "message": "Your account is frozen. You cannot perform this transaction."}
 
         current_balance = Decimal(row["balance"])
         if current_balance < amount:
